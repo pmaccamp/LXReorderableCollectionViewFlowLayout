@@ -184,14 +184,14 @@ static NSString * const kLXCollectionViewKeyPath = @"collectionView";
     
     self.selectedItemIndexPath = newIndexPath;
     
-    if ([self.dataSource respondsToSelector:@selector(collectionView:itemAtIndexPath:willMoveToIndexPath:)]) {
-        [self.dataSource collectionView:self.collectionView itemAtIndexPath:previousIndexPath willMoveToIndexPath:newIndexPath];
-    }
-
     __weak typeof(self) weakSelf = self;
     [self.collectionView performBatchUpdates:^{
         __strong typeof(self) strongSelf = weakSelf;
         if (strongSelf) {
+            if ([self.dataSource respondsToSelector:@selector(collectionView:itemAtIndexPath:willMoveToIndexPath:)]) {
+                [self.dataSource collectionView:self.collectionView itemAtIndexPath:previousIndexPath willMoveToIndexPath:newIndexPath];
+            }
+
             [strongSelf.collectionView deleteItemsAtIndexPaths:@[ previousIndexPath ]];
             [strongSelf.collectionView insertItemsAtIndexPaths:@[ newIndexPath ]];
         }
